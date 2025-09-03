@@ -1,0 +1,66 @@
+Solana API Documentation
+========================
+
+Overview:
+---------
+This API allows you to fetch Solana wallet balances and SPL token holdings.
+It runs locally at: http://127.0.0.1:3030
+
+Endpoints:
+----------
+
+1. GET /balance/{wallet_address}
+   - Purpose: Fetch the SOL (native token) balance for a given wallet.
+   - Replace {wallet_address} with the Solana wallet you want to check.
+   - Example:
+     http://127.0.0.1:3030/balance/YourWalletAddressHere
+   - Expected Output (JSON):
+     {
+       "lamports": 123456789,   // Raw balance in lamports (1 SOL = 1,000,000,000 lamports)
+       "sol": 0.123456789       // Balance in SOL
+     }
+   - Notes:
+     - "lamports" is the smallest unit of SOL.
+     - "sol" is human-friendly balance.
+
+
+
+2. GET /tokens/{wallet_address}
+   - Purpose: Fetch SPL token holdings for a given wallet.
+   - Replace {wallet_address} with the Solana wallet you want to check.
+   - Example:
+     http://127.0.0.1:3030/tokens/YourWalletAddressHere
+   - Expected Output (JSON Array):
+     [
+       {
+         "mint": "TokenMintAddress",
+         "amount": 10.5,       // Amount of this token in the wallet
+         "decimals": 2,        // Number of decimal places the token uses
+         "symbol": "TOKEN",    // Token symbol
+         "name": "Token Name", // Token name
+         "logoURI": "https://..." // Token logo URL
+       },
+       ...
+     ]
+   - Notes:
+     - Only shows tokens the wallet actually holds.
+     - Information is enriched using Solana's token list.
+
+Testing the API:
+----------------
+1. Make sure the API server is running (see terminal: "Solana API running at http://127.0.0.1:3030").
+2. Open a web browser or use a tool like Postman.
+3. Enter the URL with a valid wallet address.
+4. You will receive JSON responses with balances or token holdings.
+
+Errors:
+-------
+- If an invalid wallet address is provided or a request fails, the response will include:
+  { "error": "Failed to fetch balance" }  or
+  { "error": "Failed to fetch tokens" }
+
+Tips:
+-----
+- Wallet addresses are case-sensitive.
+- SPL tokens are user-created tokens on the Solana network.
+- This API only reads data; it does not modify wallets.
